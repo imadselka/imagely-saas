@@ -16,8 +16,8 @@ import {
   defaultValues,
   transformationTypes,
 } from "@/constants";
-import { AspectRatioKey } from "@/lib/utils";
-import { useState } from "react";
+import { AspectRatioKey, debounce, deepMergeObjects } from "@/lib/utils";
+import { useState, useTransition } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { CustomField } from "./CustomField";
@@ -37,13 +37,29 @@ const TransformationForm = ({
   creditBalance,
   config = null,
 }: TransformationFormProps) => {
+  // Comments are added to the code to explain Also FOR DEBUGGING PURPOSES
+  // type TransformationTypeKey = "restore" | "fill" | "remove" | "recolor" | "removeBackground"
   const transformationType = transformationTypes[type];
   const [image, setImage] = useState(data);
+  //   type Transformations = {
+  //     restore?: boolean | undefined;
+  //     fillBackground?: boolean | undefined;
+  //     remove?: {
+  //         prompt: string;
+  //         removeShadow?: boolean | undefined;
+  //         multiple?: boolean | undefined;
+  //     } | undefined;
+  //     recolor?: {
+  //         ...;
+  //     } | undefined;
+  //     removeBackground?: boolean | undefined;
+  // }
   const [newTransformation, setNewTransformation] =
     useState<Transformations | null>(null);
   const [isSubmiting, setIsSubmiting] = useState(false);
   const [isTransforming, setIsTransforming] = useState(false);
   const [transformationConfg, setTransformationConig] = useState(config);
+  const [isPending, startTransition] = useTransition();
 
   const initialValues =
     data && action === "Update"
@@ -78,6 +94,8 @@ const TransformationForm = ({
       width: imageSize.width,
       height: imageSize.height,
     }));
+    setNewTransformation(transformationType.config);
+    return onChangeField(value);
   };
 
   const onInputChangeHandler = (
@@ -85,9 +103,30 @@ const TransformationForm = ({
     value: string,
     type: string,
     onChangeField: (value: string) => void
-  ) => {};
+  ) => {
+    debounce(() => {
+      setNewTransformation((prevState: any) => ({
+        ...prevState,
+        [type]: {
+          ...prevState?.[type],
+          [fieldName === "prompt" ? "prompt" : "to"]: value,
+        },
+      }));
+      return onChangeField(value);
+    }, 1000);
+  };
+  // TODO Return to updateCredits
+  const onTransformHandler = async () => {
+    setIsTransforming(true);
+    setTransformationConig(
+      deepMergeObjects(transformationConfg, newTransformation)
+    );
+    setNewTransformation(null);
 
-  const onTransformHandler = () => {};
+    startTransition(async () => {
+      // await updateCredits(userId,creditFee);
+    });
+  };
 
   return (
     <Form {...form}>

@@ -29,7 +29,7 @@ const MediaUploader = ({
       publicId: result?.info?.public_id,
       width: result?.info?.width,
       height: result?.info?.height,
-      secureUrl: result?.info?.secure_url,
+      secureURL: result?.info?.secure_url,
     }));
     // public_id coming from cloudinary api response
     // now image has public_id, width, height, secureUrl

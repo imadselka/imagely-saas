@@ -10,6 +10,7 @@ Imagely is a website powered with AI, You can generate images **Using Generative
   - `npx shadcn-ui@latest add form`
   - `npx shadcn-ui@latest add select`
   - `npx shadcn-ui@latest add toast`
+  - `npx shadcn-ui@latest add alert-dialog`
 - **qs**
   - `npm install qs`
 - **svix**

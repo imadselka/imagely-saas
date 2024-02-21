@@ -4,7 +4,7 @@ export interface Image extends Document {
   title: string;
   transformationType: string;
   publicId: string;
-  secureUrl: string;
+  secureURL: string;
   width?: number;
   height?: number;
   config?: object;
@@ -34,7 +34,7 @@ const imageSchema = new Schema({
     type: String,
     required: true,
   },
-  secureUrl: {
+  secureURL: {
     type: String,
     required: true,
   },
@@ -48,7 +48,7 @@ const imageSchema = new Schema({
     type: Object,
   },
   transformationUr: {
-    type: URL,
+    type: String,
   },
   aspectRatio: {
     type: String,

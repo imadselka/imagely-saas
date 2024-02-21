@@ -28,7 +28,7 @@ import { getCldImageUrl } from "next-cloudinary";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { CustomField } from "./CustomField";
-// import { InsufficientCreditsModal } from "./InsufficientCreditsModal";
+import { InsufficientCreditsModal } from "./InsufficientCreditsModal";
 import MediaUploader from "./MediaUploader";
 import TransformedImage from "./TransformedImage";
 
@@ -199,10 +199,16 @@ const TransformationForm = ({
     }
   }, [image, transformationType.config, type]);
 
+  useEffect(() => {
+    if (isPending) {
+      setIsTransforming(false);
+    }
+  }, [isPending]);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* {creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />} */}
+        {creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />}
         <CustomField
           control={form.control}
           name="title"

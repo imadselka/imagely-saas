@@ -199,12 +199,6 @@ const TransformationForm = ({
     }
   }, [image, transformationType.config, type]);
 
-  useEffect(() => {
-    if (isPending) {
-      setIsTransforming(false);
-    }
-  }, [isPending]);
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
